@@ -1,3 +1,6 @@
+# Download Deep VGG19 weights at: https://www.vlfeat.org/matconvnet/pretrained/
+# 
+
 import tensorflow as tf
 import numpy as np 
 import scipy.io  
