@@ -1,0 +1,9 @@
+numpy
+pandas
+scipy
+imageio
+pillow
+tensorflow
+tensorflow_hub
+matplotlib
+moviepy
