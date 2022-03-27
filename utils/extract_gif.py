@@ -62,8 +62,8 @@ def processImage(path):
     
     try:
         while True:
-            print "saving %s (%s) frame %d, %s %s" % (path, mode, i, im.size, im.tile)
-            
+            print("saving %s (%s) frame %d, %s %s" % (path, mode, i, im.size, im.tile))
+             
             '''
             If the GIF uses local colour tables, each frame will have its own palette.
             If not, we need to apply the global palette to the new frame.
@@ -95,5 +95,5 @@ def main():
     processImage('bar.gif')
     
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

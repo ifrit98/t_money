@@ -25,6 +25,7 @@ import ffmpy
 
 import tensorflow_hub as hub
 
+nss = numeric_str_sort = lambda l: l.sort(key=lambda x: int(x.split("\\")[-1].split(".")[0]))
 
 def load_model(hub_path='https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2'):
     hub_model = hub.load(hub_path)
@@ -40,21 +41,21 @@ def get_online_images(content_url, style_url):
     return content_path, style_path
 
 
-def get_frame_filepaths(basepath):
-    files = glob.glob(os.path.join(basepath, "*.png"))
+def get_frame_filepaths(basepath, ext='.png'):
+    files = glob.glob(os.path.join(basepath, "*{}".format(ext)))
     numeric_str_sort(files)
     return files
 
 def load_frames(path):
     frames = []
-    files = get_frame_filespaths(path)
+    files = get_frame_filepaths(path)
     for im_path in files:
         im = imageio.imread(im_path)
         frames.append(im)
     return np.stack(frames)
 
-def extract_frames(path):
-  with PIL.Image.open(path) as im:
+def extract_frames(gifpath, outdir):
+  with PIL.Image.open(gifpath) as im:
       for i in range(im.n_frames):
             im.seek(i)
             im.save(os.path.join(outdir, '{}.png'.format(i)))
@@ -146,7 +147,6 @@ if False:
   path = "/home/user/internal/t_money/gifs/take_it_frames"
   path = "./take_it_frames"
   style_path = "../styles/Edvard-Munch.jpg"
-  nss = numeric_str_sort = lambda l: l.sort(key=lambda x: int(x.split("\\")[-1].split(".")[0]))
   gif_path = "take_it.gif"
 
 
