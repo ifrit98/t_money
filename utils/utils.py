@@ -2,10 +2,11 @@ import PIL
 import os
 import glob
 import numpy as np
-# import tensorflow_hub as hub
 import tensorflow as tf
+# import tensorflow_hub as hub
 import imageio
 import matplotlib.pyplot as plt
+import moviepy.editor as mp
 
 from tensorflow.python.framework.ops import Tensor, EagerTensor
 
@@ -19,10 +20,13 @@ nss = numeric_str_sort = lambda l: l.sort(
 tss = terence_str_sort = lambda l: l.sort(
   key=lambda x: int(x.split("\\")[-1].split("_")[-1].split(".")[0])
 )
+sss = lambda l: l.sort(
+  key=lambda x: int(x.split("\\")[-1].split(".")[0].split("_")[0])
+)
 
-dirpath=r"C:\Users\stgeorge\Desktop\personal_projects\t_money_nft\results\terence\intermediate"
+dirpath=r"C:\Users\stgeorge\Desktop\personal_projects\t_money_nft\content\gifs\take_it_frames\styled"
 ext=".png"
-outpath=r"C:\Users\stgeorge\Desktop\personal_projects\t_money_nft\results\terence\final\gif.gif"
+outpath=r"C:\Users\stgeorge\Desktop\personal_projects\t_money_nft\results\terence\final\styled_gif.gif"
 
 def tensor_to_image(tensor):
   tensor = tensor*255
@@ -31,6 +35,7 @@ def tensor_to_image(tensor):
     assert tensor.shape[0] == 1
     tensor = tensor[0]
   return PIL.Image.fromarray(tensor)
+
 
 def load_image_dir(dirpath, ext='.png', sort_fn=numeric_str_sort, first=None):
   files = glob.glob(os.path.join(dirpath, "*{}".format(ext)))
@@ -54,7 +59,57 @@ def save_tensors_as_gif(images, outpath):
     del images
     print("Completed!")
 
-def split_gif(path, n_frames="all"):
+def convert_gif_to_video(gif_path):
+  clip = mp.VideoFileClip(gif_path)
+  clip.write_videofile(gif_path.split(".gif")[0] + '.mp4')
+
+# WIP
+def frames_to_video(path_input_frames, path_output_video):
+
+    image_list = []
+    count = 0
+    path_converted_frame = PATH_TMP + 'x' + (str(count).zfill(5)) + '.jpg'
+
+    image = cv2.imread(path_converted_frame)
+    height, width, _ = image.shape
+    size = (width,height)
+    print('size: ', size)
+
+    converted_files = [file_name for file_name in os.listdir(PATH_TMP) if 'x' in file_name]
+    converted_files.sort()
+
+    for file_name in converted_files:
+
+        path_converted_frame = PATH_TMP + file_name
+        image = cv2.imread(path_converted_frame)
+        print(path_converted_frame)
+        image_list.append(image)
+
+    video_writer = cv2.VideoWriter(path_output_video, cv2.VideoWriter_fourcc(*'mp4v'), VIDEO_FPS, size)
+    for i in range(len(image_list)):
+        video_writer.write(image_list[i])
+
+    video_writer.release()
+    print('video generated: ', path_output_video)
+
+import cv2
+
+def video_to_frames(path_input_video, max_frames=1000, path_tmp='./tmp/'): 
+    video_capture = cv2.VideoCapture(path_input_video) 
+    if not os.path.exists(path_tmp):
+        os.mkdir(path_tmp)
+    for count in range(max_frames):
+        success, image = video_capture.read() 
+        if success == False: break
+        path_frame = path_tmp + (str(count).zfill(5)) + '.jpg'
+        cv2.imwrite(path_frame, image) 
+        print(count, path_frame)
+
+def frames_to_gif(inpath, outpath, sort_fn=numeric_str_sort, ext=".png"):
+    images = load_image_dir(inpath, sort_fn=sort_fn, ext=ext)
+    save_tensors_as_gif(images, outpath)
+    
+def gif_to_frames(path, n_frames="all"):
   outdir = os.path.join(os.path.dirname(path), os.path.split(path)[-1] + "_frames")
   if not os.path.exists(outdir):
       os.mkdir(outdir)
@@ -70,6 +125,8 @@ def split_gif(path, n_frames="all"):
           for i in range(num_key_frames):
               im.seek(im.n_frames // num_key_frames * i)
               im.save(os.path.join(outdir, '{}.png'.format(i)))
+
+split_gif=gif_to_frames
 
 def load_model(hub_path='https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2'):
     hub_model = hub.load(hub_path)

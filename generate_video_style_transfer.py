@@ -144,12 +144,12 @@ def clear_tmp():
 #
 if __name__ == '__main__':
 
-    if len(sys.argv) != 3:
-        print('usage: video.py videeo style')
-        exit()
+    # if len(sys.argv) != 3:
+    #     print('usage: video.py video style')
+    #     exit()
 
-    name_original = sys.argv[1]
-    name_style = sys.argv[2]
+    # name_original = sys.argv[1]
+    # name_style = sys.argv[2]
 
     name_original = "the_guiding_image.mp4"
     name_style = "abstract.jpg"

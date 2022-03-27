@@ -33,6 +33,8 @@ def load_model(hub_path='https://tfhub.dev/google/magenta/arbitrary-image-styliz
 
 
 HUB_MODEL = load_model()
+VIDEO_PATH = "./videos/"
+GIF_PATH = "./gifs/"
 
 
 def get_online_images(content_url, style_url):
@@ -95,7 +97,6 @@ def imshow(image, title=None):
         plt.title(title)
     plt.show()
 
-
 def stylize_image(content_path, style_path, show=False):
     if globals().get("HUB_MODEL") is None:
         globals().update({"HUB_MODEL", load_model()})
@@ -116,17 +117,6 @@ def stylize_image(content_path, style_path, show=False):
 
     return tensor_to_image(stylized_image)
 
-VIDEO_PATH = "./videos/"
-GIF_PATH = "./gifs/"
-
-def convert_gif_to_video(gif_path):
-  # # A
-  # import ffmpy
-  # ff = ffmpy.FFmpeg(
-  #   inputs={gif_path: None}, outputs={gif_path.split(".gif")[0] + '.mp4': None})
-  # B
-  clip = mp.VideoFileClip(gif_path)
-  clip.write_videofile(gif_path.split(".gif")[0] + '.mp4')
 
 def dir_path(string):
     if os.path.isdir(string):
@@ -148,8 +138,3 @@ if False:
   path = "./take_it_frames"
   style_path = "../styles/Edvard-Munch.jpg"
   gif_path = "take_it.gif"
-
-
-# parser = argparse.ArgumentParser()
-# parser.add_argument('--content_path', type=dir_path)
-# parser.add_argument('--style_path', type=dir_path)
