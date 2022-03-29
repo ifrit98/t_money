@@ -27,7 +27,7 @@ PATH_TMP = './tmp/'
 PATH_TMP_MP3 = PATH_TMP + 'tmp.mp3'
 
 MAX_IMAGE_DIM = 1024
-MAX_FRAMES = 30 * 60
+MAX_FRAMES = 30 * 2
 VIDEO_FPS = 30.0
 
 #
@@ -152,7 +152,7 @@ if __name__ == '__main__':
     # name_style = sys.argv[2]
 
     name_original = "the_guiding_image.mp4"
-    name_style = "abstract.jpg"
+    name_style = "wave_crop.jpg"
 
     time_start = time.time()
     print(f'converting video: {name_original} {name_style}')
