@@ -7,6 +7,7 @@ import tensorflow_hub as hub
 import imageio
 import matplotlib.pyplot as plt
 import moviepy.editor as mp
+from pytube import YouTube
 
 from tensorflow.python.framework.ops import Tensor, EagerTensor
 
@@ -25,9 +26,14 @@ sss = lambda l: l.sort(
   key=lambda x: int(x.split("\\")[-1].split(".")[0].split("_")[0])
 )
 
-# dirpath=r"C:\Users\stgeorge\Desktop\personal_projects\t_money_nft\content\gifs\take_it_frames\styled"
-# ext=".png"
-# outpath=r"C:\Users\stgeorge\Desktop\personal_projects\t_money_nft\results\terence\final\styled_gif.gif"
+
+def download_youtube(url, res='hi'):
+    yt = YouTube(url)
+    streams = yt.streams.filter(progressive=True, file_extension='mp4')
+    ordered = streams.order_by('resolution')
+    streams = ordered.desc() if res == 'hi' else streams.asc() # lowest first
+    video = streams.first().download()
+    return video
 
 def grab_every_nth_elem(x, n):
   return x[::n]
