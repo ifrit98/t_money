@@ -39,7 +39,7 @@ GIF_PATH = "./gifs/"
 
 def get_online_images(content_url, style_url):
     content_path = tf.keras.utils.get_file(os.path.split(content_url)[-1], content_url)
-    style_path = tf.keras.utils.get_file(os.path.split(style_url)[-1], style_path)
+    style_path = tf.keras.utils.get_file(os.path.split(style_url)[-1], style_url)
     return content_path, style_path
 
 

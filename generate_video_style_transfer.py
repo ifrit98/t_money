@@ -6,12 +6,10 @@
 #
 #
 import os
-import sys
 import cv2
 import time
 import subprocess
 
-import numpy as np
 import matplotlib.image
 import tensorflow as tf
 import tensorflow_hub as hub
@@ -29,6 +27,10 @@ PATH_TMP_MP3 = PATH_TMP + 'tmp.mp3'
 MAX_IMAGE_DIM = 1024
 MAX_FRAMES = 30 * 2
 VIDEO_FPS = 30.0
+
+# load and cache the styling dnn
+HUB_MODULE = hub.load(HUB_URL)
+
 
 #
 # normalize an image for usage by dnn
@@ -68,7 +70,7 @@ def generate_frames(path_input_video, path_image_style):
         cv2.imwrite(path_frame, image) 
 
         image = load_image(path_frame)
-        results = hub_module(tf.constant(image), tf.constant(image_style))
+        results = HUB_MODULE(tf.constant(image), tf.constant(image_style))
 
         image = tf.squeeze(results[0], axis=0)
         matplotlib.image.imsave(path_converted_frame, image) 
@@ -137,13 +139,12 @@ def clear_tmp():
         print('deleting: ', file_path)
         os.unlink(file_path)
 
-
 #
 # MAIN
 # Interpret a video based off the given style
 #
 if __name__ == '__main__':
-
+# def main():
     # if len(sys.argv) != 3:
     #     print('usage: video.py video style')
     #     exit()
